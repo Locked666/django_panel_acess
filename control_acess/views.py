@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 import requests
 from django.contrib.auth.models import User
 from .models import cidade
@@ -8,14 +8,22 @@ from .models import cidade
 
 def index(request):
             # return render(request, 'index.html')
+    if request.method == 'GET':
+        # Verifica se o usuário está logado
+        if request.user.is_authenticated:
+            # Se estiver logado, redireciona para a página de administração
+            return render(request, 'index.html', context={'title': 'Página Inicial', 'message': 'Olá, mundo!'})
+        else:
+            # Se não estiver logado, redireciona para a página de login
+            return HttpResponseRedirect('admin')
             
-    return render(request, 'index.html', context={'title': 'Página Inicial', 'message': 'Olá, mundo!'})
+    
 
 def login(request):
     return HttpResponse('Login')
 
 def attcidade(request):
-    API_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/51/municipios"  # Substitua pela URL correta da sua API
+    API_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/50/municipios"  # Substitua pela URL correta da sua API
 
     try:
         response = requests.get(API_URL)

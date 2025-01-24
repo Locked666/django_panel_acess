@@ -31,12 +31,14 @@ class ConfigAcessoForm(forms.ModelForm):
 class ConfigAcessoAdmin(admin.ModelAdmin):
     form = ConfigAcessoForm
     list_display = ('entidade', 'tp_conexao', 'status', 'data_criacao')
+    list_filter = ('status', 'tp_conexao')
     search_fields = ('entidade__nome',)
 
 
 class EntidadeAdmin(admin.ModelAdmin):
     list_display = ('nome', 'status', 'tipo', 'cnpj', 'email', 'telefone', 'endereco', 'cidade', 'cep', 'data_criacao')
     search_fields = ('nome', 'cnpj', 'email', 'telefone', 'endereco', 'cidade__nome', 'cep')
+    list_filter = ('status', 'tipo', )
     
 admin.site.register(config_acesso, ConfigAcessoAdmin)
 admin.site.register(entidade,EntidadeAdmin)

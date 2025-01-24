@@ -27,14 +27,14 @@ class entidade(models.Model):
     nome = models.CharField(max_length=100)
     status = models.BooleanField(default=True)
     tipo = models.CharField(max_length=4, choices=choice)
-    cnpj = models.CharField(max_length=14)
-    email = models.EmailField(max_length=100)
-    telefone = models.CharField(max_length=11)
-    endereco = models.CharField(max_length=100)
-    cidade = models.OneToOneField(cidade, on_delete=models.CASCADE)
-    cep = models.CharField(max_length=8)
+    cnpj = models.CharField(max_length=14, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    telefone = models.CharField(max_length=11, null=True, blank=True)
+    endereco = models.CharField(max_length=100, null=True, blank=True)
+    cidade = models.ForeignKey(cidade, on_delete=models.CASCADE,unique=False)
+    cep = models.CharField(max_length=8, null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
-    data_modificacao = models.DateTimeField(auto_now=True)
+    data_modificacao = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.nome    
@@ -47,10 +47,10 @@ class config_acesso(models.Model):
         (3, 'QSConect'),
     )
     status = models.BooleanField(default=True)
-    entidade = models.OneToOneField(entidade, on_delete=models.CASCADE)
+    entidade = models.ForeignKey(entidade, on_delete=models.CASCADE,unique=False)
     tp_conexao = models.IntegerField(choices=tp_conexao_choice)
-    id_conexao = models.CharField(max_length=100)
-    senha_conexao = models.CharField(max_length=100)
+    id_conexao = models.CharField(max_length=100, null=True, blank=True)
+    senha_conexao = models.CharField(max_length=100, null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_modificacao = models.DateTimeField(auto_now=True)    
     senha_conexao = models.CharField(max_length=200)  # Aumente o tamanho para suportar o hash
@@ -69,6 +69,7 @@ class log_acesso(models.Model):
     tp_conexao = models.CharField(max_length=100)
     data_acesso = models.DateTimeField(auto_now=True)
     ip_acesso = models.GenericIPAddressField()
+    user_acesso = models.CharField(max_length=100, null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_modificacao = models.DateTimeField(auto_now=True)
     
