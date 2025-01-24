@@ -3,6 +3,7 @@ from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 import requests
 from django.contrib.auth.models import User
 from .models import cidade
+from django.http import Http404
 # Create your views here.
 
 
@@ -21,6 +22,10 @@ def index(request):
 
 def login(request):
     return HttpResponse('Login')
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
 
 def attcidade(request):
     API_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/50/municipios"  # Substitua pela URL correta da sua API
